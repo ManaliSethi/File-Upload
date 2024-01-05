@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>File Upload Webpage</title>
+</head>
+<body>
+  <h1 id="server-response">Server Response Will Appear Here</h1>
+  <input type="text" id="inputField" placeholder="Enter Input">
+  <input type="file" id="fileInput" accept=".txt, .pdf, .doc, .docx">
+  <button onclick="uploadDataAndFile()">Upload to Server</button>
+
+  <script>
+    function uploadDataAndFile() {
+      const inputData = document.getElementById('inputField').value;
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      // Create a FormData object to send both text and file data
+      const formData = new FormData();
+      formData.append('inputData', inputData);
+      formData.append('file', file);
+
+      // Send data to the server
+      fetch('/upload-file', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Server response:', data.message);
+        document.getElementById('server-response').innerText = data.message;
+      })
+      .catch(error => console.error('Error:', error));
+    }
+  </script>
+</body>
+</html>
